@@ -1,25 +1,71 @@
-import logo from './logo.svg';
+import React from 'react';
 import './App.css';
+import {Route, Link} from 'react-router-dom';
+import LoginComponent from './LoginComponent';
+import RegisterComponent from './RegisterComponent';
+import HomeComponent from './HomeComponent';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+/*
+function AppHook(){
+  const [users, setUsers] = useState( [] );
+  const [instructor, setInstructor] = useState( {} );
+
+  setUsers( [...users, newUser ] )
+  this.setState({
+    users : [...this.state.users, newUser]
+  });
 }
+*/
+class App extends React.Component{
+  constructor( props ){
+    super( props );
+    this.state = {
+      users : [],
+      instructor : {}
+    }
+  }
 
+  registerUser = ( event ) => {
+    event.preventDefault();
+    const newUser = {
+      userName : event.target.userName.value,
+      password : event.target.password.value
+    };
+
+    this.setState({
+      users : [...this.state.users, newUser]
+    });
+  }
+
+  render(){
+    return(
+      <div className="App">
+        <h1>
+          Welcome to the routing practice
+        </h1>
+        <ul>
+          <li>
+            <Link to="/">
+              Home
+            </Link>
+          </li>
+          <li>
+            <Link to="/login">
+              Login
+            </Link>
+          </li>
+          <li>
+            <Link to="/register">
+              Register
+            </Link>
+          </li>
+        </ul>
+        <Route path="/login" render={ (routeProps) => <LoginComponent {...routeProps}/> }/>
+        <Route path="/register" render={ () => <RegisterComponent registerUser={this.registerUser} /> }/>
+        <Route exact path="/name/:firstName/:lastName" render={ (routeProps) => <HomeComponent {...routeProps} />}/>
+      </div>
+    )
+  }
+}
 export default App;
